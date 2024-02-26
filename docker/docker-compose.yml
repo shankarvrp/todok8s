@@ -17,7 +17,7 @@ services:
     image: jwilder/dockerize:0.6.1
     depends_on:
       - stats-queue
-    command: 'dockerize -wait=tcp://stats-queue:5672'
+    command: 'dockerize -wait=amqp://stats-queue:5672'
   stats-api:
     image: mindarodev.azurecr.io/samples/stats-api:v7
     build:
