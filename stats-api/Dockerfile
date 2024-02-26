@@ -3,8 +3,8 @@ ENV PORT 80
 EXPOSE 80
 
 WORKDIR /app
-COPY package*.json ./
+COPY stats-api/package*.json ./
 RUN npm install
-COPY . .
+COPY stats-api/. .
 
 CMD ["npm", "start"]

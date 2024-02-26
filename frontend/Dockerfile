@@ -3,9 +3,9 @@ ENV PORT 80
 EXPOSE 80
 
 WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
+COPY frontend/package*.json ./
+RUN npm install 
+COPY frontend/. .
 RUN npm run build
 
 CMD ["npm", "start"]

@@ -3,8 +3,10 @@ import TodoItem from './TodoItem';
 import TodoFooter from './TodoFooter';
 import Link from 'next/link';
 
-class TodoApp extends Component {
-    constructor(props) {
+class TodoApp extends Component
+{
+    constructor(props)
+    {
         super(props);
 
         this.state = {
@@ -21,7 +23,8 @@ class TodoApp extends Component {
         this.deleteTodo = this.deleteTodo.bind(this);
     }
 
-    async callApi(method, routeUrl, body) {
+    async callApi(method, routeUrl, body)
+    {
         const res = await fetch(routeUrl, {
             method: method,
             cache: 'no-cache',
@@ -31,72 +34,88 @@ class TodoApp extends Component {
             body: JSON.stringify(body)
         });
 
-        if (!res.ok) {
+        if (!res.ok)
+        {
             throw new Error(`Failed to call API '${routeUrl}'. Make sure that 'database-api' and 'todos-db' are running properly. Details: ${res.statusText}`);
         }
 
         const contentType = res.headers.get("content-type");
-        if (contentType && contentType.indexOf("application/json") !== -1) {
+        if (contentType && contentType.indexOf("application/json") !== -1)
+        {
             return await res.json("");
         }
         return res.text();
     }
 
-    async getTodos() {
-        const data = await this.callApi("GET", "/api/todos");
-        if (data) {
+    async getTodos()
+    {
+        const data = await this.callApi("GET", "/todos");
+        if (data)
+        {
             this.setState({ todos: data });
         }
     }
 
-    async componentDidMount() {
+    async componentDidMount()
+    {
         await this.getTodos();
     }
 
-    async addTodo(newTodoTitle) {
-        const newTodo = await this.callApi("POST", "/api/todos", { title: newTodoTitle, completed: false });
+    async addTodo(newTodoTitle)
+    {
+        const newTodo = await this.callApi("POST", "/todos", { title: newTodoTitle, completed: false });
         this.setState({ todos: this.state.todos.concat(newTodo) });
     }
 
-    async deleteTodo(todoToDelete) {
-        const data = await this.callApi("DELETE", "/api/todos/" + todoToDelete.id, todoToDelete);
-        if (data) {
+    async deleteTodo(todoToDelete)
+    {
+        const data = await this.callApi("DELETE", "/todos/" + todoToDelete.id, todoToDelete);
+        if (data)
+        {
             this.setState({ todos: data });
         }
     };
 
-    async toggleTodo(todoToToggle) {
+    async toggleTodo(todoToToggle)
+    {
         const updatedTodo = {
             title: todoToToggle.title,
             completed: !todoToToggle.completed
         }
-        const data = await this.callApi("PUT", "/api/todos/" + todoToToggle.id, updatedTodo);
-        if (data) {
+        const data = await this.callApi("PUT", "/todos/" + todoToToggle.id, updatedTodo);
+        if (data)
+        {
             this.setState({ todos: data });
         }
     }
 
-    handleChange(event) {
+    handleChange(event)
+    {
         this.setState({ newTodo: event.target.value });
     }
 
-    handleNewTodoKeyDown(event) {
-        if (event.keyCode !== this.state.settings.ENTER_KEY) {
+    handleNewTodoKeyDown(event)
+    {
+        if (event.keyCode !== this.state.settings.ENTER_KEY)
+        {
             return;
         }
         event.preventDefault();
 
         var val = this.state.newTodo.trim();
 
-        if (val) {
+        if (val)
+        {
             this.addTodo(val);
             this.setState({ newTodo: '' });
         }
     }
 
-    render() {
+    render()
+    {
         var todos = this.state.todos;
-        var todoItems = todos.map((todo) => {
+        var todoItems = todos.map((todo) =>
+        {
             return (
                 <TodoItem
                     key={todo.id}
@@ -108,7 +127,8 @@ class TodoApp extends Component {
             );
         });
 
-        var activeTodoCount = todos.reduce(function (accum, todo) {
+        var activeTodoCount = todos.reduce(function (accum, todo)
+        {
             return todo.completed ? accum : accum + 1;
         }, 0);
 

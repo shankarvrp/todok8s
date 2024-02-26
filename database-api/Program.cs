@@ -13,9 +13,8 @@ namespace DatabaseApi
         {
             var dbHost = Environment.GetEnvironmentVariable("TODOS_DB_SERVICE_HOST");
             var dbport = Environment.GetEnvironmentVariable("TODOS_DB_SERVICE_PORT");
-            var mongoServer = Environment.GetEnvironmentVariable("TODOS_DB_SERVER");
 
-            var connectionString = $"{mongoServer}://{dbHost}:{dbport}";
+            var connectionString = $"mongodb://{dbHost}:{dbport}";
             var database = "todos";
             var collection = "todos";
             MongoHelper.Initialize(connectionString, database, collection);
