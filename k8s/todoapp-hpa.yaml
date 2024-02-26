@@ -1,0 +1,24 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: stats-api-hpa
+spec:
+  maxReplicas: 5 # Adjust if needed
+  minReplicas: 1 # Adjust if needed
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: stats-api
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu # Add the missing name field
+      target:
+        type: Utilization
+        averageUtilization: 30
+  - type: Resource
+    resource:
+      name: memory # Add the missing name field
+      target:
+        type: Utilization
+        averageUtilization: 60

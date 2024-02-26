@@ -1,0 +1,28 @@
+version: '3.4'
+
+services:
+  todo-db:
+    container_name: todo-db
+    image: mongo:4
+    ports:
+      - "27017:27017"
+  todo-api:
+    container_name: todo-api
+    environment:
+      - MONGO_CONNECTION_STRING=todo-db://todos-db
+    ports:
+      - '5007:8080'
+    depends_on: 
+      - todo-db
+  todo-app:
+    container_name: todo-app
+    environment:
+      - STATS_QUEUE_URI=amqp://stats-queue
+      - DATABASE_API_SERVICE_HOST=http://todo-api
+      - DATABASE_API_SERVICE_PORT=5007
+    ports:
+      - '5006:80'
+    depends_on: 
+      - todo-db
+      - todo-api
+

@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mypvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: azure-managed-disk  # If you created a Storage Class
+  resources:
+    requests:
+      storage: 5Gi

@@ -1,0 +1,23 @@
+version: '3.4'
+
+services:
+  todo-db:
+    image: mongo:4
+    networks:
+     - mynet
+  todo-app:
+    image: ${DOCKER_REGISTRY-}shankarvrp/todoapp
+    build:
+      context: .
+      dockerfile: ./frontend/Dockerfile
+    networks:
+     - mynet
+  todo-api:
+    image: ${DOCKER_REGISTRY-}shankarvrp/todoapi
+    build:
+      context: .
+      dockerfile: ./database-api/Dockerfile
+    networks:
+     - mynet
+networks:
+  mynet:
