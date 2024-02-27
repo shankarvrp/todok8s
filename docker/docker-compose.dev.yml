@@ -1,0 +1,79 @@
+version: '3.4'
+
+services:
+
+#### Stats App
+
+  stats-cache:
+    container_name: stats-cache
+    ports:
+      - '6379:6379'
+    networks:
+     - mynet
+
+  stats-queue:
+    container_name: stats-queue
+    ports:
+      - '5672:5672'
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5672"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+     - mynet
+
+  stats-api:
+    container_name: stats-api
+    ports:
+      - '5006:80'
+    networks:
+      - mynet
+
+  stats-worker:
+    container_name: stats-worker
+    environment:
+      - STATS_QUEUE_URI=amqp://stats-queue:5672
+      - REDIS_HOST=stats-cache
+      - REDIS_PORT=6379
+    ports:
+      - '5008:8081'
+    networks:
+      - mynet
+
+#### Todo App
+
+  todo-db:
+    container_name: mongodb
+    image: mongo:4
+    ports:
+      - "27017:27017"
+    networks:
+     - mynet
+     
+  todo-api:
+    container_name: todo-api
+    environment:
+      - MONGO_CONNECTION_STRING=mongodb://todo-db
+      - TODOS_DB_SERVICE_HOST=todo-db
+      - TODOS_DB_SERVICE_PORT=27017
+    ports:
+      - '5007:80'
+    networks:
+     - mynet
+
+  todo-app:
+    container_name: todo-app
+    environment:
+      # - STATS_QUEUE_URI=amqp://stats-queue
+      - DATABASE_API_SERVICE_HOST=todo-api
+      - DATABASE_API_SERVICE_PORT=80
+      - STATS_QUEUE_SERVICE_HOST=stats-queue
+      - STATS_QUEUE_SERVICE_PORT=5672
+    ports:
+      - '5005:80'
+    networks:
+     - mynet
+
+networks:
+  mynet:
