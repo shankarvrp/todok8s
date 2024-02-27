@@ -4,6 +4,7 @@
 using System;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 
 namespace DatabaseApi
 {
@@ -26,6 +27,7 @@ namespace DatabaseApi
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                });
+                }).UseSerilog((context, configuration) =>
+                    configuration.ReadFrom.Configuration(context.Configuration));
     }
 }

@@ -58,6 +58,8 @@ services:
       - todo-db 
     networks:
      - mynet
+    volumes:
+      - logvol:/app/logs
   todo-app:
     image: ${DOCKER_REGISTRY-}shankarvrp/todoapp
     build:
@@ -74,3 +76,5 @@ services:
      
 networks:
   mynet:
+volumes:
+  logvol:

@@ -218,6 +218,7 @@ kind: Service
 metadata:
   name: database-api
 spec:
+  type: LoadBalancer
   selector:
     name: database-api
   ports:

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 
 namespace DatabaseApi
 {
@@ -31,6 +32,13 @@ namespace DatabaseApi
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            Log.Logger = new LoggerConfiguration()
+                        .WriteTo.Console()
+                        .WriteTo.File("/logs/log.txt", rollingInterval: RollingInterval.Day)
+                        .CreateLogger();
+
+            app.UseSerilogRequestLogging();
 
             app.UseRouting();
 
